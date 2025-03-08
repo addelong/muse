@@ -148,6 +148,18 @@ export const Header: React.FC<HeaderProps> = ({ chattiness, setChattiness, conte
           <h1 className="text-lg font-medium text-gray-800">Muse</h1>
         </div>
         <div className="flex items-center space-x-2">
+          <a 
+            href="https://www.buymeacoffee.com/alandelong" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex items-center"
+          >
+            <img 
+              src="https://img.buymeacoffee.com/button-api/?text=Tip jar&emoji=&slug=alandelong&button_colour=FFDD00&font_colour=000000&font_family=Poppins&outline_colour=000000&coffee_colour=ffffff" 
+              alt="Buy Me A Coffee" 
+              className="h-8"
+            />
+          </a>
           <button 
             className="p-2 rounded-md hover:bg-gray-100 transition-colors" 
             title="Save"

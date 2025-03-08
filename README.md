@@ -14,6 +14,8 @@ Muse is a minimalist web-based writing app with an AI editor/cowriter. It's desi
 - Secure local storage of your OpenAI API key
 - Save your work to a local file
 - Open existing text files to continue working on them
+- First-time user onboarding with a helpful "how to use" modal
+- Support the developer with a "Tip jar" button
 
 ## Getting Started
 
@@ -92,5 +94,3 @@ This project uses:
 - OpenAI API for AI suggestions
 
 ## License
-
-MIT

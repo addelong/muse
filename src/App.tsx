@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback, useRef } from "react";
 import { Editor } from "./components/Editor";
 import { Header } from "./components/Header";
 import { SuggestionPanel } from "./components/SuggestionPanel";
+import { HowToUseModal } from "./components/HowToUseModal";
 import { openAIService, AISuggestion } from "./services/OpenAIService";
 export function App() {
   const [content, setContent] = useState<string>("");
@@ -12,9 +13,10 @@ export function App() {
   const [lastSuggestionTime, setLastSuggestionTime] = useState<number>(0);
   const [chattiness, setChattiness] = useState<number>(0.5);
   const [isTyping, setIsTyping] = useState<boolean>(false);
+  const [showHowToUseModal, setShowHowToUseModal] = useState<boolean>(false);
   const typingTimerRef = useRef<number | null>(null);
 
-  // Initialize app state
+  // Initialize app state and check if it's the first visit
   useEffect(() => {
     // Check if OpenAI API key is configured
     setApiKeyConfigured(openAIService.isInitialized());
@@ -24,7 +26,19 @@ export function App() {
     
     // Get chattiness level
     setChattiness(openAIService.getChattiness());
+    
+    // Check if it's the first visit
+    const hasVisitedBefore = localStorage.getItem("muse_has_visited_before");
+    if (!hasVisitedBefore) {
+      setShowHowToUseModal(true);
+      localStorage.setItem("muse_has_visited_before", "true");
+    }
   }, []);
+  
+  // Handle closing the how-to-use modal
+  const handleCloseHowToUseModal = () => {
+    setShowHowToUseModal(false);
+  };
   
   // Update chattiness in service when it changes in UI
   useEffect(() => {
@@ -113,6 +127,10 @@ export function App() {
         content={content}
         setContent={handleContentChange}
       />
+      
+      {showHowToUseModal && (
+        <HowToUseModal onClose={handleCloseHowToUseModal} />
+      )}
       <div className="flex flex-1 w-full">
         <div className="w-72 h-full flex flex-col items-center p-4 overflow-auto">
           {suggestions.slice(0, Math.ceil(suggestions.length / 2)).map((suggestion, index) => (

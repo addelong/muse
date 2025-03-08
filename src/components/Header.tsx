@@ -6,9 +6,10 @@ interface HeaderProps {
   setChattiness: (value: number) => void;
   content: string;
   setContent: (content: string) => void;
+  onShowHelp: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ chattiness, setChattiness, content, setContent }) => {
+export const Header: React.FC<HeaderProps> = ({ chattiness, setChattiness, content, setContent, onShowHelp }) => {
   const [showSettings, setShowSettings] = useState<boolean>(false);
   const [showMenu, setShowMenu] = useState<boolean>(false);
   const [apiKey, setApiKey] = useState<string>("");
@@ -174,7 +175,11 @@ export const Header: React.FC<HeaderProps> = ({ chattiness, setChattiness, conte
           >
             <SettingsIcon className="h-5 w-5 text-gray-600" />
           </button>
-          <button className="p-2 rounded-md hover:bg-gray-100 transition-colors" title="Help">
+          <button 
+            className="p-2 rounded-md hover:bg-gray-100 transition-colors" 
+            title="Help"
+            onClick={onShowHelp}
+          >
             <HelpCircleIcon className="h-5 w-5 text-gray-600" />
           </button>
         </div>

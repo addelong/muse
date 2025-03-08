@@ -35,7 +35,11 @@ export function App() {
     }
   }, []);
   
-  // Handle closing the how-to-use modal
+  // Handle showing and closing the how-to-use modal
+  const handleShowHowToUseModal = () => {
+    setShowHowToUseModal(true);
+  };
+  
   const handleCloseHowToUseModal = () => {
     setShowHowToUseModal(false);
   };
@@ -126,6 +130,7 @@ export function App() {
         setChattiness={setChattiness} 
         content={content}
         setContent={handleContentChange}
+        onShowHelp={handleShowHowToUseModal}
       />
       
       {showHowToUseModal && (

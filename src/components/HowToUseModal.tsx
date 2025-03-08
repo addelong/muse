@@ -1,11 +1,40 @@
-import React from "react";
-import { XIcon, ExternalLinkIcon } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { XIcon, ExternalLinkIcon, CheckIcon } from "lucide-react";
 
 interface HowToUseModalProps {
   onClose: () => void;
+  apiKey?: string;
+  onSaveApiKey?: (apiKey: string) => void;
 }
 
-export const HowToUseModal: React.FC<HowToUseModalProps> = ({ onClose }) => {
+export const HowToUseModal: React.FC<HowToUseModalProps> = ({ 
+  onClose, 
+  apiKey: initialApiKey = "", 
+  onSaveApiKey 
+}) => {
+  const [apiKey, setApiKey] = useState<string>(initialApiKey);
+  const [showApiKeySaved, setShowApiKeySaved] = useState<boolean>(false);
+  
+  // Reset the saved message after a delay
+  useEffect(() => {
+    let timer: number | null = null;
+    if (showApiKeySaved) {
+      timer = window.setTimeout(() => {
+        setShowApiKeySaved(false);
+      }, 3000);
+    }
+    return () => {
+      if (timer) window.clearTimeout(timer);
+    };
+  }, [showApiKeySaved]);
+  
+  // Handle saving the API key
+  const handleSaveApiKey = () => {
+    if (onSaveApiKey && apiKey.trim()) {
+      onSaveApiKey(apiKey.trim());
+      setShowApiKeySaved(true);
+    }
+  };
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-lg w-full max-w-2xl p-6 max-h-[90vh] overflow-y-auto">
@@ -32,9 +61,34 @@ export const HowToUseModal: React.FC<HowToUseModalProps> = ({ onClose }) => {
             <div className="space-y-3">
               <div>
                 <h4 className="font-medium text-gray-800">1. Set up your OpenAI API Key</h4>
-                <p className="text-gray-700">
-                  Muse requires an OpenAI API key to generate suggestions. Click the settings icon <span className="inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></span> in the top-right corner and enter your API key.
+                <p className="text-gray-700 mb-3">
+                  Muse requires an OpenAI API key to generate suggestions. You can enter it below or click the settings icon <span className="inline-block"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></span> in the top-right corner later.
                 </p>
+                
+                <div className="flex items-center space-x-2 mb-3">
+                  <input
+                    type="password"
+                    placeholder="Enter your OpenAI API key (starts with sk-...)"
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    value={apiKey}
+                    onChange={(e) => setApiKey(e.target.value)}
+                  />
+                  <button
+                    className="px-3 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    onClick={handleSaveApiKey}
+                    disabled={!apiKey.trim() || !onSaveApiKey}
+                  >
+                    Save
+                  </button>
+                </div>
+                
+                {showApiKeySaved && (
+                  <div className="flex items-center text-green-600 mb-3">
+                    <CheckIcon className="h-4 w-4 mr-1" />
+                    <span className="text-sm">API key saved successfully!</span>
+                  </div>
+                )}
+                
                 <p className="text-gray-700 mt-1">
                   Don't have an API key? <a href="https://platform.openai.com/signup" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 inline-flex items-center">
                     Sign up for one here 

@@ -29,8 +29,6 @@ class OpenAIService {
    * Initialize the OpenAI client with the API key
    */
   private initializeClient(): void {
-    if (this.initialized) return;
-    
     try {
       // Try to get API key from localStorage first, then fall back to environment variable
       const localStorageApiKey = typeof localStorage !== 'undefined' ? localStorage.getItem("openai_api_key") : null;
@@ -48,11 +46,15 @@ class OpenAIService {
           apiKey,
           dangerouslyAllowBrowser: true // Allow usage in browser
         });
+        this.initialized = true;
+      } else {
+        this.openai = null;
+        this.initialized = false;
       }
     } catch (error) {
       console.error('Error initializing OpenAI client:', error);
-    } finally {
-      this.initialized = true;
+      this.openai = null;
+      this.initialized = false;
     }
   }
   
@@ -147,6 +149,7 @@ class OpenAIService {
    * Generate suggestions based on the provided content
    */
   async generateSuggestions(content: string): Promise<AISuggestion[]> {
+    // Always check for API key before each call
     this.initializeClient();
     
     if (!this.openai) {

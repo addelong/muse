@@ -44,6 +44,13 @@ export function App() {
     setShowHowToUseModal(false);
   };
   
+  // Handle saving the API key
+  const handleSaveApiKey = (newApiKey: string) => {
+    localStorage.setItem("openai_api_key", newApiKey);
+    // Force the OpenAI service to reinitialize with the new API key
+    setApiKeyConfigured(openAIService.isInitialized());
+  };
+  
   // Update chattiness in service when it changes in UI
   useEffect(() => {
     openAIService.setChattiness(chattiness);
@@ -134,7 +141,11 @@ export function App() {
       />
       
       {showHowToUseModal && (
-        <HowToUseModal onClose={handleCloseHowToUseModal} />
+        <HowToUseModal 
+          onClose={handleCloseHowToUseModal} 
+          apiKey={localStorage.getItem("openai_api_key") || ""}
+          onSaveApiKey={handleSaveApiKey}
+        />
       )}
       <div className="flex flex-1 w-full">
         <div className="w-72 h-full flex flex-col items-center p-4 overflow-auto">
